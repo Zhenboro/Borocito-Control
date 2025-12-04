@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col">
+            <div class="card text-center">
+                <div class="card-header">
+                    Infectados
+                </div>
+                <div class="card-body">
+                    <h1 class="display-3 card-title">69</h1>
+                </div>
+                <div class="card-footer text-body-secondary">
+                    <a href="{% url 'web:user-list' %}" class="btn btn-primary w-100">Ver lista</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center">
+                <div class="card-header">
+                    Componentes
+                </div>
+                <div class="card-body">
+                    <h1 class="display-3 card-title">13</h1>
+                </div>
+                <div class="card-footer text-body-secondary">
+                    <div class="row">
+                        <div class="col">
+                            <a href="#" class="btn btn-primary w-100">Administrar</a>
+                        </div>
+                        <div class="col">
+                            <a target="_blank" href="https://github.com/Borocito/Components-for-Borocito/blob/main/README.md" class="btn btn-primary w-100">Ver docs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center">
+                <div class="card-header">
+                    Telemetria
+                </div>
+                <div class="card-body">
+                    <h1 class="display-3 card-title">67</h1>
+                </div>
+                <div class="card-footer text-body-secondary">
+                    <a href="{% url 'web:telemetry' %}" class="btn btn-primary w-100">Ver archivos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

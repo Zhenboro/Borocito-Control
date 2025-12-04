@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="list-group">
+        {% for archivo in archivos %}
+        <a href="#" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ archivo.0 }}</h5>
+                <small>{{ archivo.4 }}</small>
+            </div>
+            <small>{{ archivo.1 }} | {{ archivo.2 }} | {{ archivo.3 }}</small> 
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
