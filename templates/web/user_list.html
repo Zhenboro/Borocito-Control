@@ -6,13 +6,14 @@
         <div class="col-4">
             <div class="list-group">
                 {% for infectado in infectados %}
-                <a href="#" class="list-group-item list-group-item-action">
-                    {{ infectado }}
-                </a>
+                <button hx-get="{% url 'web:user-report' infectado.uuid %}" hx-trigger="click" hx-target="#user-report" hx-swap="innerHTML" class="list-group-item list-group-item-action text-end">
+                    {{ infectado.nombre }}
+                </button>
                 {% endfor %}
             </div>
         </div>
         <div class="col">
+            <div id="user-report"></div>
         </div>
     </div>
 </div>
