@@ -5,4 +5,5 @@ app_name = "api"
 
 urlpatterns = [
     path('report/', views.report, name="report"),
+    path('telemetry/', views.telemetry, name="telemetry"),
 ]

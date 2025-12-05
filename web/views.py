@@ -2,6 +2,10 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpRequest, HttpResponse
 
+import os
+from pathlib import Path
+from datetime import datetime
+
 # Create your views here.
 from api.models import Instancia
 
@@ -28,10 +32,11 @@ def user_control_instance(request: HttpRequest, infectado):
         return HttpResponse(f'<p style="margin-bottom: -6px;">[{request.user.username}] {request.POST.get("command", "NADA")}</p>')
     return render(request, "web/user_control_instance.html", {"infectado": infectado})
 
+# TODO : permitir descargar un archivo, de ser posible usar StreamingHttpResponse
 def telemetry(request: HttpRequest):
-    return render(request, "web/telemetry.html", {"archivos": [
-        ["asd1.log", "27KB", ".LOG", "user1", "now"],
-        ["asd2.txt", "8KB", ".TXT", "user3", " 3 hours ago"],
-        ["asd3.zip", "2GB", ".ZIP", "user2", " 1 day ago"],
-        ["asd4.jpeg", "1MB", ".JPEG", "user4", " 3 days ago"],
-    ]})
+    archivos = []
+    # TODO : tomar el uuid / key para saber quien lo subio y mostrarlo
+    for entry in Path("telemetry").iterdir():
+        archivo = entry.stat()
+        archivos.append([entry.name, entry.suffix, f'{archivo.st_size} KB', datetime.fromtimestamp(archivo.st_ctime).strftime("%d/%m/%Y, %H:%M")])
+    return render(request, "web/telemetry.html", {"archivos": archivos})

@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 
 import json
+from datetime import datetime
 
 # Create your views here.
 from api.models import Instancia
@@ -17,4 +18,12 @@ def report(request: HttpRequest):
         instancia.save()
     return JsonResponse({"uuid": instancia.uuid}, safe=False, status=201)
 
-# gente, no soy experto en Django, apenas soy principiante. porfavor no me funen.
+@csrf_exempt
+def telemetry(request: HttpRequest):
+    if request.method == "POST" and request.FILES["archivo"]:
+        archivo = request.FILES["archivo"]
+        # TODO : nombre del archivo debe incluir el uuid o key del que origen
+        with open(f"telemetry/{archivo.name}", "wb+") as destination:
+            for chunk in archivo.chunks():
+                destination.write(chunk)
+    return JsonResponse({"status": True}, safe=False)
