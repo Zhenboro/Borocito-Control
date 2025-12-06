@@ -137,3 +137,9 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Borocito configuration
+
+BOROCITO_TELEMETRY_DIR = BASE_DIR / config('BOROCITO_TELEMETRY_DIR')
+BOROCITO_COMPONENTS_REPOSITORY = config('BOROCITO_COMPONENTS_REPOSITORY')

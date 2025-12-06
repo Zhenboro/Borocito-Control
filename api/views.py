@@ -1,9 +1,8 @@
 from django.http import HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
+from django.conf import settings
 
 import json
-from datetime import datetime
 
 # Create your views here.
 from api.models import Instancia
@@ -23,7 +22,7 @@ def telemetry(request: HttpRequest):
     if request.method == "POST" and request.FILES["archivo"]:
         archivo = request.FILES["archivo"]
         # TODO : nombre del archivo debe incluir el uuid o key del que origen
-        with open(f"telemetry/{archivo.name}", "wb+") as destination:
+        with open(f"{settings.BOROCITO_TELEMETRY_DIR}/{archivo.name}", "wb+") as destination:
             for chunk in archivo.chunks():
                 destination.write(chunk)
     return JsonResponse({"status": True}, safe=False)
