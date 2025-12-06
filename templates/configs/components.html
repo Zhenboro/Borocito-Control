@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+
+{% block page_title%}Components{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1>There are {{ instalados }} components installed</h1>
+    <hr>
+    <div class="list-group">
+        {% for componente in componentes %}
+        <div class="list-group-item list-group-item-action py-4">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ componente.name }} {{ componente.version }}</h5>
+                <small>{{ componente.created_at }}</small>
+            </div>
+            <p class="mb-2">{{ componente.description }}</p>
+            <div class="row">
+                <div class="col">
+                    <a href="#" class="btn btn-primary">Manage</a>
+                    <a href="{{ componente.docs }}" target="_blank" class="btn btn-outline-primary">See docs</a>
+                </div>
+                <div class="col">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end opacity-50">
+                        Created by <a href="{{ componente.website }}" target="_blank">Zhenboro</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

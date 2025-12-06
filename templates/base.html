@@ -43,13 +43,10 @@
                             data-bs-toggle="dropdown" aria-expanded="false">Settings</a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="dropdown-item" href="#">Server</a>
+                                <a class="dropdown-item" href="{% url 'configs:server' %}">Server</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#">Clients</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">Components</a>
+                                <a class="dropdown-item" href="{% url 'configs:components' %}">Components</a>
                             </li>
                         </ul>
                     </li>

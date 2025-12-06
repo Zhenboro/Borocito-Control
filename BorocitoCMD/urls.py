@@ -20,6 +20,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include("api.urls", namespace="api")),
+    path('config/', include("configs.urls", namespace="configs")),
     path('', include("web.urls", namespace="web")),
     
     path("__reload__/", include("django_browser_reload.urls")),

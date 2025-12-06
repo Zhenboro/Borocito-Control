@@ -4,6 +4,8 @@
 {% block page_title%}Dashboard{% endblock %}
 {% block content %}
 <div class="container mt-4">
+    <h1>Server running on {{ request.get_host }}</h1>
+    <hr>
     <div class="row">
         <div class="col">
             <div class="card text-center">
@@ -29,7 +31,7 @@
                 <div class="card-footer text-body-secondary">
                     <div class="row">
                         <div class="col">
-                            <a href="#" class="btn btn-primary w-100">Administrar</a>
+                            <a href="{% url 'configs:components' %}" class="btn btn-primary w-100">Administrar</a>
                         </div>
                         <div class="col">
                             <a target="_blank" href="https://github.com/Borocito/Components-for-Borocito/blob/main/README.md" class="btn btn-primary w-100">Ver docs</a>

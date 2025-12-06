@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'control',
     'web',
     'api',
+    'configs',
 ]
 
 MIDDLEWARE = [
