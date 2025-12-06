@@ -6,7 +6,7 @@
 <div class="container mt-4">
     <h1>Server running on {{ request.get_host }}</h1>
     <hr>
-    <div class="row">
+    <div class="row mb-4">
         <div class="col">
             <div class="card text-center">
                 <div class="card-header">
@@ -54,5 +54,91 @@
             </div>
         </div>
     </div>
+    <div class="row mb-4">
+        <div class="col">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-success"><i class="bi bi-hdd-stack"></i> Borocito CLI Control API is running...</li>
+                <li class="list-group-item list-group-item-success"><i class="bi bi-hdd-stack"></i> Borocito CMD Control API is running...</li>
+                <li class="list-group-item list-group-item-danger"><i class="bi bi-hdd-stack"></i> Borocito Components API is not configured!</li>
+                <li class="list-group-item list-group-item-warning"><i class="bi bi-database-exclamation"></i> Reached 1GB in telemetry files!</li>
+                <li class="list-group-item list-group-item-info"><i class="bi bi-info-circle-fill"></i> This is just info, lol</li>
+            </ul>
+        </div>
+        <div class="col">
+            <dl class="row">
+                <dt class="col-sm-3">Server Status</dt>
+                <dd class="col-sm-9">{{ configuration.server_status|yesno:"Active,Inactive,idk" }}</dd>
+
+                <dt class="col-sm-3">Key-pairs</dt>
+                <dd class="col-sm-9">
+                    <button type="button" class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#keyPairsModal">
+                        <i class="bi bi-eye-fill"></i> See
+                    </button>
+                </dd>
+
+                <dt class="col-sm-3">Allow new instances</dt>
+                <dd class="col-sm-9">{{ configuration.allow_new_instances|yesno:"Yes,no,idk" }}</dd>
+
+                <dt class="col-sm-3">Reborn mode</dt>
+                <dd class="col-sm-9">{{ configuration.reborn_mode|yesno:"Enabled,Disabled,idk" }}</dd>
+
+                <dt class="col-sm-3">Fall back server</dt>
+                <dd class="col-sm-9">{{ configuration.fall_back_server }}</dd>
+
+                <dt class="col-sm-3">boro-get</dt>
+                <dd class="col-sm-9">
+                    <dl class="row">
+                        <dt class="col-sm-4">Version</dt>
+                        <dd class="col-sm-8">{{ configuration.boro_get.version }}</dd>
+
+                        <dt class="col-sm-4">Binary</dt>
+                        <dd class="col-sm-8">{{ configuration.boro_get.binary }}</dd>
+
+                        <dt class="col-sm-4">Repository</dt>
+                        <dd class="col-sm-8">{{ configuration.boro_get.repository }}</dd>
+                    </dl>
+                </dd>
+
+                <dt class="col-sm-3">Borocito</dt>
+                <dd class="col-sm-9">
+                    <dl class="row">
+                        <dt class="col-sm-4">Version</dt>
+                        <dd class="col-sm-8">{{ configuration.borocitos.version }}</dd>
+
+                        <dt class="col-sm-4">Binaries</dt>
+                        <dd class="col-sm-8">{{ configuration.borocitos.binaries }}</dd>
+                    </dl>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="keyPairsModal" tabindex="-1" aria-labelledby="keyPairsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="keyPairsModalLabel">Borocito CLI Instances Allow Key-Pairs</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+            Only instances with one of these Key-Pairs can make requests to this server.
+        </p>
+        <ul class="list-group text-center my-2">
+            {% for key in configuration.key_pairs %}
+            <li class="list-group-item">{{ key }}</li>
+            {% endfor %}
+        </ul>
+        <div class="alert alert-warning" role="alert">
+            If you click the "Generate new Key-Pairs" button, all your current instances will lose the connection with this server.
+        </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-danger disabled"><i class="bi bi-exclamation-triangle-fill"></i> Generate new Key-Pairs <i class="bi bi-exclamation-triangle-fill"></i></button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

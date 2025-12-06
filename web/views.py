@@ -9,11 +9,17 @@ from datetime import datetime
 
 # Create your views here.
 from api.models import Instancia
-from configs.models import Component
+from configs.models import Configuration, Component
 
 def dashboard(request: HttpRequest):
+    configuration = Configuration.objects.last() # last row is always the active one
     infectados = Instancia.objects.count()
-    return render(request, "web/dashboard.html", {"infectados": infectados, "componentes": Component.objects.count(), "telemetria": sum([len(files) for r, d, files in os.walk(settings.BOROCITO_TELEMETRY_DIR)])})
+    return render(request, "web/dashboard.html", {
+        "infectados": infectados,
+        "componentes": Component.objects.count(),
+        "configuration": configuration,
+        "telemetria": sum([len(files) for r, d, files in os.walk(settings.BOROCITO_TELEMETRY_DIR)]),
+    })
 
 def user_list(request: HttpRequest):
     infectados = Instancia.objects.all()

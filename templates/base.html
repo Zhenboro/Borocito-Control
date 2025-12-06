@@ -39,16 +39,8 @@
                     <li class="nav-item">
                         <a class="nav-link {% if 'telemetry' in request.path %}active{% endif %}" href="{% url 'web:telemetry' %}">Telemetry</a>
                     </li>
-                    <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#"
-                            data-bs-toggle="dropdown" aria-expanded="false">Settings</a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href="{% url 'configs:server' %}">Server</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{% url 'configs:components' %}">Components</a>
-                            </li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'components' in request.path %}active{% endif %}" href="{% url 'configs:components' %}">Components</a>
                     </li>
                 </ul>
                 <div class="d-flex">
