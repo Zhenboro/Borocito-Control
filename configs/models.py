@@ -22,13 +22,13 @@ class Configuration(models.Model):
             "binary": "/boro-get/boro-get.zip",
             "repository": "/boro-get/repository.ini",
         }
-    server_status = models.BooleanField(default=True, null=True, blank=True, verbose_name="Server Status") # if the server is online and will handle requests
-    allow_new_instances = models.BooleanField(default=True, null=True, blank=True, verbose_name="¿Allow New Instances?") # if False, new Borocito-CLI instances will be blocked
-    reborn_mode = models.BooleanField(default=False, null=True, blank=True, verbose_name="Reborn Mode") # allows deleted/dead Borocito-CLI instances to be handled again
-    fall_back_server = models.CharField(max_length=70, null=True, blank=True, verbose_name="Fallback Server") # set a fallback server that can be used when primary is down/deleted
-    key_pairs = models.JSONField(default=default_key_pairs, null=True, blank=True, verbose_name="Key Pairs")
-    borocitos = models.JSONField(default=default_borocitos, null=True, blank=True, verbose_name="Borocitos")
-    boro_get = models.JSONField(default=default_boro_get, null=True, blank=True, verbose_name="boro-get")
+    server_status = models.BooleanField(default=True, null=True, blank=True, verbose_name="Server Status", help_text="Allow server to handle all requests.")
+    allow_new_instances = models.BooleanField(default=True, null=True, blank=True, verbose_name="¿Allow New Instances?", help_text="Allow new Borocito-CLI report instances to be handled.")
+    reborn_mode = models.BooleanField(default=False, null=True, blank=True, verbose_name="Reborn Mode", help_text="Allows old/deleted instances to be handled again.")
+    fall_back_server = models.CharField(max_length=70, null=True, blank=True, verbose_name="Fallback Server", help_text="Set a fallback server that can be used when Primary is down/offline.")
+    key_pairs = models.JSONField(default=default_key_pairs, null=True, blank=True, verbose_name="Key Pairs", help_text="The Key-Pairs instances need to make requests.")
+    borocitos = models.JSONField(default=default_borocitos, null=True, blank=True, verbose_name="Borocitos", help_text="For Borocito-Updater to search and download updates.")
+    boro_get = models.JSONField(default=default_boro_get, null=True, blank=True, verbose_name="boro-get", help_text="boro-get and Borocito-CLI will need this information.")
     
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True, auto_now_add=False)
@@ -37,13 +37,13 @@ class Configuration(models.Model):
         return f'Configuration from {self.created_at.strftime("%d/%m/%Y, %H:%M")}. Last modified on {self.modified_at.strftime("%d/%m/%Y, %H:%M")}'
 
 class Component(models.Model):
-    name = models.CharField(max_length=70, null=True, blank=True, verbose_name="Component")
-    description = models.TextField(null=True, blank=True, verbose_name="Description")
-    executable = models.CharField(max_length=70, null=True, blank=True, verbose_name="Entry point")
-    version = models.CharField(max_length=70, null=True, blank=True, verbose_name="Version")
-    docs = models.CharField(max_length=70, null=True, blank=True, verbose_name="Documentation")
+    name = models.CharField(max_length=70, null=True, blank=True, verbose_name="Component", help_text="Component name.")
+    description = models.TextField(null=True, blank=True, verbose_name="Description", help_text="Short description.")
+    executable = models.CharField(max_length=70, null=True, blank=True, verbose_name="Entry point", help_text="Executable file to run for when is used/installed.")
+    version = models.CharField(max_length=70, null=True, blank=True, verbose_name="Version", help_text="Version of the component.")
+    docs = models.CharField(max_length=70, null=True, blank=True, verbose_name="Documentation", help_text="Where you can find useful information about this component.")
     
-    binaries = models.CharField(max_length=70, null=True, blank=True, verbose_name="Binaries")
+    binaries = models.CharField(max_length=70, null=True, blank=True, verbose_name="Binaries", help_text="From where will boro-get get this component.")
     
     author = models.CharField(max_length=70, null=True, blank=True, verbose_name="Author")
     website = models.CharField(max_length=70, null=True, blank=True, verbose_name="Website")
