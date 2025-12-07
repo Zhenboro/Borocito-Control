@@ -21,6 +21,9 @@ class Instancia(models.Model):
     ram = models.CharField(max_length=70, null=True, blank=True, verbose_name="RAM", help_text="RAM available.")
     screen = models.CharField(max_length=90, null=True, blank=True, verbose_name="Screen", help_text="Screen information.")
     
+    command = models.TextField(null=True, blank=True, verbose_name="Command", help_text="IDFTP command.")
+    response = models.TextField(null=True, blank=True, verbose_name="Response", help_text="IDFTP command response.")
+    
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 

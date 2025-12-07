@@ -8,4 +8,5 @@ urlpatterns = [
     path('telemetry/', views.telemetry, name="telemetry"),
     path('configuration/', views.configuration, name="configuration"),
     path('repository/', views.repository, name="repository"),
+    path('instance/', views.instance, name="instance"),
 ]

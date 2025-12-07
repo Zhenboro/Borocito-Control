@@ -5,7 +5,7 @@ from configs.models import Configuration
 def borocito_instance_endpoint(view_func):
     # TODO : should add "Key-Pair" or "Instance" (by key=key-pair) on the request object ?
     def wrapper(request: HttpRequest, *args, **kwargs):
-        if not "Borocito-CLI" in request.headers.get("User-Agent"):
+        if not "Borocito" in request.headers.get("User-Agent"):
             return JsonResponse({"status": "WHO TF ARE U LMAOOOOO"}, status=404)
         key_pairs = list(Configuration.objects.last().key_pairs)
         if not request.headers.get("Key-Pair") in key_pairs:
