@@ -6,10 +6,12 @@ import json
 from pathlib import Path
 
 # Create your views here.
+from api.utilities import borocito_instance_endpoint
 from api.models import Instancia, Telemetria
 from configs.models import Component, Configuration
 
 @csrf_exempt
+@borocito_instance_endpoint
 def report(request: HttpRequest):
     if request.method == "POST":
         cuerpo = dict(json.loads(request.body))
@@ -18,6 +20,7 @@ def report(request: HttpRequest):
         return JsonResponse({"uuid": instancia.uuid}, safe=False, status=201)
 
 @csrf_exempt
+@borocito_instance_endpoint
 def telemetry(request: HttpRequest):
     if request.method == "POST" and request.FILES["archivo"]:
         archivo = request.FILES["archivo"]
@@ -25,7 +28,7 @@ def telemetry(request: HttpRequest):
             filename=archivo.name,
             extension=Path(archivo.name).suffix,
             size=archivo.size,
-            #instance="" # TODO
+            instance=Instancia.objects.get(key=request.headers.get("Key-Pair"))
         )
         telemetria.telemetry.save(archivo.name, archivo)
         return JsonResponse({"status": True}, safe=False, status=201)
