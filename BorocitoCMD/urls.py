@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+admin.site.site_header = 'Borocito-CS Panel'
+admin.site.site_title = 'Borocito-CS'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include("api.urls", namespace="api")),
