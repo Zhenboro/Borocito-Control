@@ -4,11 +4,9 @@ from django.http import HttpRequest, HttpResponse, Http404
 from django.conf import settings
 
 import os
-from pathlib import Path
-from datetime import datetime
 
 # Create your views here.
-from api.models import Instancia
+from api.models import Instancia, Telemetria
 from configs.models import Configuration, Component
 
 def dashboard(request: HttpRequest):
@@ -43,15 +41,12 @@ def user_control_instance(request: HttpRequest, infectado):
 def telemetry(request: HttpRequest):
     if request.GET.get("download"):
         file = request.GET.get("download")
-        if not os.path.exists(f"{settings.BOROCITO_TELEMETRY_DIR}/{file}"):
+        archivo = Telemetria.objects.get(uuid=file)
+        if not archivo and not os.path.exists(archivo.telemetry.path):
             raise Http404("Telemetry file not found")
-        with open(f"{settings.BOROCITO_TELEMETRY_DIR}/{file}", 'rb') as f:
+        with open(archivo.telemetry.path, 'rb') as f:
             response = HttpResponse(f.read())
-            response['Content-Disposition'] = f'attachment; filename=\"{os.path.basename(file)}\"'
+            response['Content-Disposition'] = f'attachment; filename=\"{archivo.filename}\"'
             return response
-    archivos = []
-    # TODO : tomar el uuid / key para saber quien lo subio y mostrarlo
-    for entry in Path(settings.BOROCITO_TELEMETRY_DIR).iterdir():
-        archivo = entry.stat()
-        archivos.append([entry.name, entry.suffix, f'{archivo.st_size} KB', datetime.fromtimestamp(archivo.st_birthtime).strftime("%d/%m/%Y, %H:%M")])
+    archivos = Telemetria.objects.all()
     return render(request, "web/telemetry.html", {"archivos": archivos})

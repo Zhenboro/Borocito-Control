@@ -1,15 +1,13 @@
 from django.http import HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.core import serializers
 from django.conf import settings
 
 import json
+from pathlib import Path
 
 # Create your views here.
-from api.models import Instancia
+from api.models import Instancia, Telemetria
 from configs.models import Component, Configuration
-
-# TODO : middleware para la auth
 
 @csrf_exempt
 def report(request: HttpRequest):
@@ -23,11 +21,14 @@ def report(request: HttpRequest):
 def telemetry(request: HttpRequest):
     if request.method == "POST" and request.FILES["archivo"]:
         archivo = request.FILES["archivo"]
-        # TODO : nombre del archivo debe incluir el uuid o key del que origen
-        # TODO : abstraer archivos de telemetria en un modelo ?????????????????????????
-        with open(f"{settings.BOROCITO_TELEMETRY_DIR}/{archivo.name}", "wb+") as destination:
-            for chunk in archivo.chunks():
-                destination.write(chunk)
+        telemetria = Telemetria(
+            filename=archivo.name,
+            extension=Path(archivo.name).suffix,
+            size=archivo.size,
+            #instance="" # TODO
+        )
+        telemetria.telemetry.save(archivo.name, archivo)
+        return JsonResponse({"status": True}, safe=False, status=201)
     return JsonResponse({"status": True}, safe=False)
 
 def configuration(request: HttpRequest):

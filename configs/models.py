@@ -5,6 +5,8 @@ import uuid
 # Create your models here.
 
 class Configuration(models.Model):
+    class Meta:
+        ordering = ['-created_at']
     def default_key_pairs() -> list:
         return [ # these are the keys Borocito-CLI uses to make requests to this server
             str(uuid.uuid4()),
@@ -37,6 +39,8 @@ class Configuration(models.Model):
         return f'Configuration from {self.created_at.strftime("%d/%m/%Y, %H:%M")}. Last modified on {self.modified_at.strftime("%d/%m/%Y, %H:%M")}'
 
 class Component(models.Model):
+    class Meta:
+        ordering = ['-created_at']
     name = models.CharField(max_length=70, null=True, blank=True, verbose_name="Component", help_text="Component name.")
     description = models.TextField(null=True, blank=True, verbose_name="Description", help_text="Short description.")
     executable = models.CharField(max_length=70, null=True, blank=True, verbose_name="Entry point", help_text="Executable file to run for when is used/installed.")

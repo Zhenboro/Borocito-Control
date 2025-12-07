@@ -6,12 +6,21 @@
 <div class="container mt-4">
     <div class="list-group">
         {% for archivo in archivos %}
-        <a href="{% url 'web:telemetry' %}?download={{ archivo.0 }}" class="list-group-item list-group-item-action">
+        <a href="{% url 'web:telemetry' %}?download={{ archivo.uuid }}" class="list-group-item list-group-item-action">
             <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{{ archivo.0 }}</h5>
-                <small>{{ archivo.3 }}</small>
+                <h5 class="mb-1">{{ archivo.filename }}</h5>
+                <small>{{ archivo.created_at }}</small>
             </div>
-            <small>{{ archivo.1 }} | {{ archivo.2 }}</small> 
+            <div class="row">
+                <div class="col">
+                    <small>{{ archivo.extension }} | {{ archivo.size }} KB</small> 
+                </div>
+                <div class="col">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end opacity-50">
+                        {{ archivo.instance.uuid }}
+                    </div>
+                </div>
+            </div>
         </a>
         {% endfor %}
     </div>
