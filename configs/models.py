@@ -19,13 +19,13 @@ class Configuration(models.Model):
     def default_borocitos() -> dict:
         return { # this is where Borocito-Updater can get version and binaries to download and update
             "version": "0.3.0.0",
-            "binaries": str(f"{settings.BOROCITO_TELEMETRY_DIR}/binaries/borocitos"),
+            "binaries": "https://github.com/Borocito/Borocito-CLI/releases/download/latest/Borocitos.zip",
         }
     def default_boro_get() -> dict:
         return { # the boro-get component will request this information for component manage
             "version": "1.2.0.0",
-            "binary": str(f"{settings.SERVER_DOMAIN}/boro-get/binaries/boro-get"),
-            "repository": str(f"{settings.SERVER_DOMAIN}/boro-get/repository"),
+            "binary": "https://github.com/Borocito/Components-for-Borocito/releases/download/latest/boro-get.zip",
+            "repository": str(f"{settings.SERVER_DOMAIN}/api/boro-get/repository"),
         }
     server_status = models.BooleanField(default=True, null=True, blank=True, verbose_name="Server Status", help_text="Allow server to handle all requests.")
     allow_new_instances = models.BooleanField(default=True, null=True, blank=True, verbose_name="¿Allow New Instances?", help_text="Allow new Borocito-CLI report instances to be handled.")
@@ -48,7 +48,7 @@ class Component(models.Model):
         verbose_name_plural = "Components"
     def default_binaries() -> str:
         # default location from where boro-get can download the binaries for install or update
-        return str(f"{settings.SERVER_DOMAIN}/boro-get/binaries/")
+        return None
     name = models.CharField(max_length=70, unique=True, null=True, blank=True, verbose_name="Component", help_text="Component name.")
     description = models.TextField(null=True, blank=True, verbose_name="Description", help_text="Short description.")
     executable = models.CharField(max_length=70, null=True, blank=True, verbose_name="Entry point", help_text="Executable file to run for when is used/installed.")
