@@ -20,7 +20,7 @@ class Instancia(models.Model):
     public_ip = models.GenericIPAddressField(null=True, blank=True, verbose_name="Public IP", help_text="Public network IP.")
     language = models.CharField(max_length=70, null=True, blank=True, verbose_name="Language", help_text="Windows language.")
     windows = models.CharField(max_length=70, null=True, blank=True, verbose_name="Windows", help_text="Windows information.")
-    ram = models.CharField(max_length=70, null=True, blank=True, verbose_name="RAM", help_text="RAM available.")
+    ram = models.CharField(max_length=70, null=True, blank=True, verbose_name="RAM", help_text="RAM available in bytes.")
     screen = models.CharField(max_length=90, null=True, blank=True, verbose_name="Screen", help_text="Screen information.")
     
     command = models.TextField(null=True, blank=True, verbose_name="Command", help_text="IDFTP command.")

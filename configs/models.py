@@ -45,13 +45,13 @@ class Component(models.Model):
         ordering = ['-created_at']
         verbose_name = "Component"
         verbose_name_plural = "Components"
-    name = models.CharField(max_length=70, null=True, blank=True, verbose_name="Component", help_text="Component name.")
+    name = models.CharField(max_length=70, unique=True, null=True, blank=True, verbose_name="Component", help_text="Component name.")
     description = models.TextField(null=True, blank=True, verbose_name="Description", help_text="Short description.")
     executable = models.CharField(max_length=70, null=True, blank=True, verbose_name="Entry point", help_text="Executable file to run for when is used/installed.")
     version = models.CharField(max_length=70, null=True, blank=True, verbose_name="Version", help_text="Version of the component.")
-    docs = models.CharField(max_length=70, null=True, blank=True, verbose_name="Documentation", help_text="Where you can find useful information about this component.")
+    docs = models.CharField(max_length=100, null=True, blank=True, verbose_name="Documentation", help_text="Where you can find useful information about this component.")
     
-    binaries = models.CharField(max_length=70, null=True, blank=True, verbose_name="Binaries", help_text="From where will boro-get get this component.")
+    binaries = models.CharField(max_length=100, null=True, blank=True, verbose_name="Binaries", help_text="From where will boro-get get this component.")
     
     author = models.CharField(max_length=70, null=True, blank=True, verbose_name="Author")
     website = models.CharField(max_length=70, null=True, blank=True, verbose_name="Website")
