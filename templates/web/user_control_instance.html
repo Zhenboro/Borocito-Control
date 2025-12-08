@@ -25,10 +25,14 @@
 <script>
     const socket = new WebSocket('ws://localhost:8000/ws/echo/');
     socket.onmessage = (e) => {
-        result = JSON.parse(e.data).result;
-        document.getElementById("messages").innerHTML += `<p style="margin-bottom: -6px;">${"Server: " + result}</p>`;
+        datos = JSON.parse(e.data);
+        if ("command" in datos) {
+            document.getElementById("messages").innerHTML += `<p style="margin-bottom: -6px;"><b>{{ user.username }}</b>: ${datos.command}</p>`;
+        }
+        if ("response" in datos) {
+            document.getElementById("messages").innerHTML += `<p style="margin-bottom: -6px;"><b>{{ infectado.username }}@{{ infectado.domain }}</b>: ${datos.response}</p>`;
+        }
     }
-
     socket.onclose = (e) => {
         console.log("Socket closed!");
     }
@@ -38,18 +42,15 @@
             document.getElementById('button-send').click();
         }
     };
-
     document.getElementById("button-send").onclick = (e) => {
         inputfield = document.getElementById("command");
         exp = inputfield.value;
         socket.send(JSON.stringify(
             {
-                expression: exp
+                command: exp
             }
         ))
-        document.getElementById("messages").innerHTML += `<p style="margin-bottom: -6px;">${"You: " + exp}</p>`;
         inputfield.value = "";
     }
-
 </script>
 {% endblock %}
