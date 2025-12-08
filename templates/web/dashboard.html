@@ -57,11 +57,36 @@
     <div class="row mb-4">
         <div class="col">
             <ul class="list-group">
+                {% if not borocito_config %}
+                <li class="list-group-item list-group-item-danger"><i class="bi bi-hdd-stack"></i> Borocito CLI Control API is not configured!</li>
+                {% else %}
                 <li class="list-group-item list-group-item-success"><i class="bi bi-hdd-stack"></i> Borocito CLI Control API is running...</li>
+                {% endif %}
+                {% if not borocito_config.server_status %}
+                <li class="list-group-item list-group-item-danger"><i class="bi bi-hdd-stack"></i> Borocito CMD Control API is offline!</li>
+                {% else %}
                 <li class="list-group-item list-group-item-success"><i class="bi bi-hdd-stack"></i> Borocito CMD Control API is running...</li>
+                {% endif %}
+                {% if not borocito_config.boro_get %}
                 <li class="list-group-item list-group-item-danger"><i class="bi bi-hdd-stack"></i> Borocito Components API is not configured!</li>
-                <li class="list-group-item list-group-item-warning"><i class="bi bi-database-exclamation"></i> Reached 1GB in telemetry files!</li>
-                <li class="list-group-item list-group-item-info"><i class="bi bi-info-circle-fill"></i> This is just info, lol</li>
+                {% else %}
+                <li class="list-group-item list-group-item-success"><i class="bi bi-hdd-stack"></i> Borocito Components API is running...</li>
+                {% endif %}
+                {% if not borocito_config.key_pairs %}
+                <li class="list-group-item list-group-item-warning"><i class="bi bi-send-exclamation-fill"></i> There are no Key-Pairs!</li>
+                {% endif %}
+                {% if telemetria_tamaño %}
+                <li class="list-group-item list-group-item-warning"><i class="bi bi-database-exclamation"></i> Reached {{ telemetria_tamaño }} in telemetry files!</li>
+                {% endif %}
+                {% if not borocito_config.allow_new_instances %}
+                <li class="list-group-item list-group-item-info"><i class="bi bi-info-circle"></i> New instances are not handled!</li>
+                {% endif %}
+                {% if not borocito_config.reborn_mode %}
+                <li class="list-group-item list-group-item-info"><i class="bi bi-info-circle"></i> Recovered Old/Lost instances are not being handled!</li>
+                {% endif %}
+                {% if not borocito_config.fall_back_server %}
+                <li class="list-group-item list-group-item-info"><i class="bi bi-info-circle"></i> No Fallback server configured!</li>
+                {% endif %}
             </ul>
         </div>
         <div class="col">

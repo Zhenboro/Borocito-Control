@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 import uuid
 
@@ -18,13 +19,13 @@ class Configuration(models.Model):
     def default_borocitos() -> dict:
         return { # this is where Borocito-Updater can get version and binaries to download and update
             "version": "0.3.0.0",
-            "binaries": "/Borocitos.zip",
+            "binaries": str(f"{settings.BOROCITO_TELEMETRY_DIR}/binaries/borocitos"),
         }
     def default_boro_get() -> dict:
         return { # the boro-get component will request this information for component manage
             "version": "1.2.0.0",
-            "binary": "/boro-get/boro-get.zip",
-            "repository": "/boro-get/repository.ini",
+            "binary": str(f"{settings.SERVER_DOMAIN}/boro-get/binaries/boro-get"),
+            "repository": str(f"{settings.SERVER_DOMAIN}/boro-get/repository"),
         }
     server_status = models.BooleanField(default=True, null=True, blank=True, verbose_name="Server Status", help_text="Allow server to handle all requests.")
     allow_new_instances = models.BooleanField(default=True, null=True, blank=True, verbose_name="¿Allow New Instances?", help_text="Allow new Borocito-CLI report instances to be handled.")
@@ -45,13 +46,16 @@ class Component(models.Model):
         ordering = ['-created_at']
         verbose_name = "Component"
         verbose_name_plural = "Components"
+    def default_binaries() -> str:
+        # default location from where boro-get can download the binaries for install or update
+        return str(f"{settings.SERVER_DOMAIN}/boro-get/binaries/")
     name = models.CharField(max_length=70, unique=True, null=True, blank=True, verbose_name="Component", help_text="Component name.")
     description = models.TextField(null=True, blank=True, verbose_name="Description", help_text="Short description.")
     executable = models.CharField(max_length=70, null=True, blank=True, verbose_name="Entry point", help_text="Executable file to run for when is used/installed.")
     version = models.CharField(max_length=70, null=True, blank=True, verbose_name="Version", help_text="Version of the component.")
     docs = models.CharField(max_length=100, null=True, blank=True, verbose_name="Documentation", help_text="Where you can find useful information about this component.")
     
-    binaries = models.CharField(max_length=100, null=True, blank=True, verbose_name="Binaries", help_text="From where will boro-get get this component.")
+    binaries = models.CharField(default=default_binaries, max_length=100, null=True, blank=True, verbose_name="Binaries", help_text="From where will boro-get get this component.")
     
     author = models.CharField(max_length=70, null=True, blank=True, verbose_name="Author")
     website = models.CharField(max_length=70, null=True, blank=True, verbose_name="Website")

