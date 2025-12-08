@@ -9,6 +9,8 @@ import os
 class Instancia(models.Model):
     class Meta:
         ordering = ['-created_at']
+        verbose_name = "Instancia"
+        verbose_name_plural = "Instancias"
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="UUID", help_text="Unique identificator for the instance.")
     key = models.CharField(max_length=70, null=True, blank=True, verbose_name="Key-Pair", help_text="Key-Pair used to make requests.")
     borocito = models.CharField(max_length=70, null=True, blank=True, verbose_name="Borocito", help_text="Borocito instance information.")
@@ -36,6 +38,8 @@ class Instancia(models.Model):
 class Telemetria(models.Model):
     class Meta:
         ordering = ['-created_at']
+        verbose_name = "Telemetria"
+        verbose_name_plural = "Telemetrias"
     def telemetry_file_path(instance, filename):
         return os.path.join(settings.BOROCITO_TELEMETRY_DIR, str(instance.uuid))
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="UUID", help_text="Unique identificator.")
