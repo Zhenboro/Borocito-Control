@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpRequest, HttpResponse, Http404
+from django.http import HttpRequest, HttpResponse
+from django.contrib import messages
 from django.conf import settings
 
 import os
@@ -42,11 +43,19 @@ def telemetry(request: HttpRequest):
     if request.GET.get("download"):
         file = request.GET.get("download")
         archivo = Telemetria.objects.get(uuid=file)
-        if not archivo and not os.path.exists(archivo.telemetry.path):
-            raise Http404("Telemetry file not found")
+        if not archivo or not os.path.exists(archivo.telemetry.path):
+            messages.error(request, f"Telemetry file doesn't exists"); return redirect('web:telemetry')
         with open(archivo.telemetry.path, 'rb') as f:
             response = HttpResponse(f.read())
             response['Content-Disposition'] = f'attachment; filename=\"{archivo.filename}\"'
             return response
+    if request.GET.get("delete"):
+        file = request.GET.get("delete")
+        archivo = Telemetria.objects.get(uuid=file)
+        if not archivo or not os.path.exists(archivo.telemetry.path):
+            messages.error(request, f"Telemetry file doesn't exists"); return redirect('web:telemetry')
+        messages.success(request, f"Telemetry file <b>{archivo.filename}</b> deleted successfully!")
+        archivo.delete()
+        return redirect('web:telemetry')
     archivos = Telemetria.objects.all()
     return render(request, "web/telemetry.html", {"archivos": archivos})

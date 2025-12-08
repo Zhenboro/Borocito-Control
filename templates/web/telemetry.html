@@ -6,22 +6,29 @@
 <div class="container mt-4">
     <div class="list-group">
         {% for archivo in archivos %}
-        <a href="{% url 'web:telemetry' %}?download={{ archivo.uuid }}" class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{{ archivo.filename }}</h5>
-                <small>{{ archivo.created_at }}</small>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <small>{{ archivo.extension }} | {{ archivo.size }} KB</small> 
-                </div>
-                <div class="col">
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end opacity-50">
-                        {{ archivo.instance.uuid }}
+        <div class="row">
+            <div class="col">
+                <a href="{% url 'web:telemetry' %}?download={{ archivo.uuid }}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ archivo.filename }}</h5>
+                        <small>{{ archivo.created_at }}</small>
                     </div>
-                </div>
+                    <div class="row">
+                        <div class="col">
+                            <small>{{ archivo.extension }} | {{ archivo.size }} KB</small> 
+                        </div>
+                        <div class="col">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end opacity-50">
+                                {{ archivo.instance.uuid }}
+                            </div>
+                        </div>
+                    </div>
+                </a>
             </div>
-        </a>
+            <div class="col-1">
+                <a href="{% url 'web:telemetry' %}?delete={{ archivo.uuid }}"><i class="bi bi-trash-fill"></i></a>
+            </div>
+        </div>
         {% endfor %}
     </div>
 </div>

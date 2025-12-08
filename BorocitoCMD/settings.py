@@ -144,3 +144,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 BOROCITO_TELEMETRY_DIR = BASE_DIR / config('BOROCITO_TELEMETRY_DIR')
 BOROCITO_COMPONENTS_REPOSITORY = config('BOROCITO_COMPONENTS_REPOSITORY')
+
+
+# Message style configuration
+
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-secondary',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
+
