@@ -3,8 +3,10 @@ from django.http import HttpRequest, JsonResponse
 from configs.models import Configuration
 
 def borocito_instance_endpoint(view_func):
-    # TODO : should add "Key-Pair" or "Instance" (by key=key-pair) on the request object ?
+    # TODO : use UUID as auth
     def wrapper(request: HttpRequest, *args, **kwargs):
+        if not "User-Agent" in request.headers:
+            return JsonResponse({"status": "WHO"}, status=404)
         if not "Borocito" in request.headers.get("User-Agent"):
             return JsonResponse({"status": "WHO TF ARE U LMAOOOOO"}, status=404)
         key_pairs = list(Configuration.objects.last().key_pairs)

