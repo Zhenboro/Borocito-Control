@@ -34,23 +34,26 @@ def report(request: HttpRequest):
 @csrf_exempt
 @borocito_instance_endpoint
 def telemetry(request: HttpRequest):
-    if request.method == "POST" and request.FILES["file"]:
-        archivo = request.FILES["file"]
-        telemetria = Telemetria(
-            filename=archivo.name,
-            extension=Path(archivo.name).suffix,
-            size=archivo.size,
-            instance=Instancia.objects.get(key=request.headers.get("Key-Pair"))
-        )
-        telemetria.telemetry.save(archivo.name, archivo)
-        return JsonResponse({"uuid": telemetria.uuid}, status=201)
+    if request.method == "POST":
+        if request.FILES["file"]: # Es un archivo
+            archivo = request.FILES["file"]
+            telemetria = Telemetria(
+                filename=archivo.name,
+                extension=Path(archivo.name).suffix,
+                size=archivo.size,
+                instance=Instancia.objects.get(key=request.headers.get("Key-Pair"))
+            )
+            telemetria.telemetry.save(archivo.name, archivo)
+            return JsonResponse({"uuid": telemetria.uuid}, status=201)
+        if request.POST.get('content'): # Es telemetria (texto plano)
+            # TODO : write content to file, if file already exists, append to it
+            return JsonResponse({"status": "OK"}, status=201)
     return JsonResponse({"status": "METHOD_NOT_SUPPORTED"}, status=405)
 
 @csrf_exempt
 @borocito_instance_endpoint
 def instance(request: HttpRequest):
     instancia = Instancia.objects.get(key=request.headers.get("Key-Pair"))
-    # TODO : controlar class ENUM types (like TELEMETRY for create a file based in raw text content)
     if request.method == "POST":
         instancia.command = None
         instancia.response = request.POST.get('content')

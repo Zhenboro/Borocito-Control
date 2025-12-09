@@ -22,7 +22,7 @@ def dashboard(request: HttpRequest):
         "telemetria": sum([len(files) for r, d, files in os.walk(settings.BOROCITO_TELEMETRY_DIR)]),
     }
     telemetria_tamaño = Telemetria.objects.aggregate(tamaño=Sum('size'))['tamaño']
-    if telemetria_tamaño >= 30_000:
+    if telemetria_tamaño and telemetria_tamaño >= 30_000:
         contexto.update({"telemetria_tamaño": convert_size(telemetria_tamaño)})
     borocito_config = Configuration.objects.last()
     if borocito_config:
