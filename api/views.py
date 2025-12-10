@@ -35,18 +35,21 @@ def report(request: HttpRequest):
 @borocito_instance_endpoint
 def telemetry(request: HttpRequest):
     if request.method == "POST":
-        if request.FILES["file"]: # Es un archivo
+        instancia = Instancia.objects.get(key=request.headers.get("Key-Pair"))
+        if 'file' in request.FILES and request.FILES["file"]: # Es un archivo
             archivo = request.FILES["file"]
             telemetria = Telemetria(
                 filename=archivo.name,
                 extension=Path(archivo.name).suffix,
                 size=archivo.size,
-                instance=Instancia.objects.get(key=request.headers.get("Key-Pair"))
+                instance=instancia,
             )
             telemetria.telemetry.save(archivo.name, archivo)
             return JsonResponse({"uuid": telemetria.uuid}, status=201)
         if request.POST.get('content'): # Es telemetria (texto plano)
             # TODO : write content to file, if file already exists, append to it
+            with open(str(f"{settings.BOROCITO_TELEMETRY_DIR}/{instancia.uuid}.log"), "a") as file:
+                file.write(str(f"{request.POST.get('content')}\n"))
             return JsonResponse({"status": "OK"}, status=201)
     return JsonResponse({"status": "METHOD_NOT_SUPPORTED"}, status=405)
 

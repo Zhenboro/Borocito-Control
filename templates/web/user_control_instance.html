@@ -36,8 +36,9 @@
             document.getElementById("messages").innerHTML += `<p style="margin-bottom: -6px;"><b>{{ user.username }}</b>: ${datos.command}</p>`;
         }
         if ("response" in datos) {
-            document.getElementById("messages").innerHTML += `<p style="margin-bottom: -6px;"><b>{{ infectado.username }}@{{ infectado.domain }}</b>: ${datos.response}</p>`;
+            document.getElementById("messages").innerHTML += `<pre style="margin-bottom: -6px;" class="ms-2 mb-2"><b>{{ infectado.username }}@{{ infectado.domain }}</b>: ${datos.response}</pre>`;
         }
+        updateScroll();
     }
     socket.onclose = (e) => {
         console.log("Socket closed!");
@@ -57,6 +58,11 @@
             }
         ))
         inputfield.value = "";
+    }
+
+    function updateScroll() {
+        var element = document.getElementById("messages");
+        element.scrollTop = element.scrollHeight;
     }
 </script>
 {% endblock %}
