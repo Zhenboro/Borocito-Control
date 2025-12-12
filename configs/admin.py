@@ -4,6 +4,7 @@ from django.contrib import admin
 from configs.models import Configuration, Component
 
 class ConfigurationAdmin(admin.ModelAdmin):
+    list_display = ["__str__", "created_at", "modified_at"]
     list_filter = ["created_at", "key_pairs"]
     ordering = ["-created_at"]
 

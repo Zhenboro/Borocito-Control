@@ -5,7 +5,7 @@ from api.models import Instancia, Telemetria
 
 class InstanciaAdmin(admin.ModelAdmin):
     list_display = ["uuid", "username", "ver_usuario_dominio", "windows", "created_at"]
-    list_filter = ["created_at", "windows", "key", "domain"]
+    list_filter = ["created_at", "key", "windows", "domain", "borocito"]
     ordering = ["-created_at"]
     search_fields = ["uuid", "username"]
     
