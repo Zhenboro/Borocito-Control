@@ -9,7 +9,7 @@
             <h1>There are {{ instalados }} components availables</h1>
         </div>
         <div class="col-1">
-            <button type="button" class="btn btn-primary disabled" data-bs-toggle="modal" data-bs-target="#addComponentModal">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addComponentModal">
                 <i class="bi bi-node-plus-fill"></i> Add
             </button>
         </div>
@@ -47,32 +47,35 @@
                 <h1 class="modal-title fs-5" id="addComponentModalLabel">New component</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div class="alert alert-warning" role="alert">
-                    <h4 class="alert-heading">Be careful!</h4>
-                    <p>
-                        If the component you're adding is not official from the <a target="_blank"
-                            href="https://github.com/Borocito/Components-for-Borocito">Components-for-Borocito</a>
-                        repository, that component can be really dangerous.
-                    </p>
-                    <hr>
-                    <p class="mb-0">
-                        Please look for well-documented, code-available sources and trusty origins before proceeding.
-                    </p>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading">Be careful!</h4>
+                        <p>
+                            If the component you're adding is not official from the <a target="_blank"
+                                href="https://github.com/Borocito/Components-for-Borocito">Components-for-Borocito</a>
+                            repository, that component can be really dangerous.
+                        </p>
+                        <hr>
+                        <p class="mb-0">
+                            Please look for well-documented, code-available sources and trusty origins before proceeding.
+                        </p>
+                    </div>
+                    In order to proceed, you need the .JSON file and upload it using the form down below.
                 </div>
-                In order to proceed, you need the .JSON file and upload it using the form down below.
-            </div>
-            <div class="modal-footer">
-                <div class="input-group mb-3">
-                    <label class="input-group-text" for="component_json_file"><i class="bi bi-cloud-upload"></i></label>
-                    <input type="file" class="form-control" id="component_json_file" name="component_json_file">
-                    <label class="input-group-text" for="component_json_file">JSON</label>
+                <div class="modal-footer">
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="component_json_file"><i class="bi bi-cloud-upload"></i></label>
+                        <input type="file" class="form-control" id="component_json_file" name="component_json_file">
+                        <label class="input-group-text" for="component_json_file">JSON</label>
+                    </div>
+                    <div class="d-flex w-100 justify-content-between">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
                 </div>
-                <div class="d-flex w-100 justify-content-between">
-                    <button type="button" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
