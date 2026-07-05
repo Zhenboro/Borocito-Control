@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.contrib import messages
 
@@ -7,6 +8,7 @@ import json
 # Create your views here.
 from configs.models import Component
 
+@login_required
 def components(request: HttpRequest):
     if request.method == "POST":
         uploaded_file = request.FILES.get('component_json_file')

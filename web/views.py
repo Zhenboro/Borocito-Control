@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpRequest, HttpResponse
 from django.contrib import messages
@@ -29,18 +30,22 @@ def dashboard(request: HttpRequest):
         contexto.update({"borocito_config": borocito_config})
     return render(request, "web/dashboard.html", contexto)
 
+@login_required
 def user_list(request: HttpRequest):
     infectados = Instancia.objects.all()
     return render(request, "web/user_list.html", {"infectados": infectados})
 
+@login_required
 def user_report(request: HttpRequest, infectado):
     infectado = Instancia.objects.get(pk=infectado)
     return render(request, "web/user_report.html", {"infectado": infectado})
 
+@login_required
 def user_control(request: HttpRequest):
     infectados = Instancia.objects.all()
     return render(request, "web/user_control.html", {"infectados": infectados})
 
+@login_required
 @csrf_exempt
 def user_control_instance(request: HttpRequest, infectado):
     infectado = Instancia.objects.get(pk=infectado)
@@ -48,6 +53,7 @@ def user_control_instance(request: HttpRequest, infectado):
     #     return HttpResponse(f'<p style="margin-bottom: -6px;">[{request.user.username}] {request.POST.get("command")}</p>')
     return render(request, "web/user_control_instance.html", {"infectado": infectado})
 
+@login_required
 def telemetry(request: HttpRequest):
     if request.GET.get("download"):
         file = request.GET.get("download")
