@@ -15,6 +15,7 @@ migrations/
 
 # Secrets
 settings.ini
+.env
 
 # Borocito stuff
 telemetry/*
