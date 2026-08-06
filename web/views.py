@@ -23,7 +23,7 @@ def dashboard(request: HttpRequest):
         "telemetria": sum([len(files) for r, d, files in os.walk(settings.BOROCITO_TELEMETRY_DIR)]),
     }
     telemetria_tamaño = Telemetria.objects.aggregate(tamaño=Sum('size'))['tamaño']
-    if telemetria_tamaño and telemetria_tamaño >= 30_000:
+    if telemetria_tamaño and telemetria_tamaño >= 50_000_000: # 50MB = alert!
         contexto.update({"telemetria_tamaño": convert_size(telemetria_tamaño)})
     borocito_config = Configuration.objects.last()
     if borocito_config:
@@ -61,8 +61,8 @@ def telemetry(request: HttpRequest):
         if not archivo or not os.path.exists(archivo.telemetry.path):
             messages.error(request, f"Telemetry file doesn't exists"); return redirect('web:telemetry')
         with open(archivo.telemetry.path, 'rb') as f:
-            response = HttpResponse(f.read())
-            response['Content-Disposition'] = f'attachment; filename=\"{archivo.filename}\"'
+            response = HttpResponse(f.read(), content_type="application/octet-stream")
+            response['Content-Disposition'] = f'inline; filename=\"{archivo.filename}\"'
             return response
     if request.GET.get("delete"):
         file = request.GET.get("delete")
