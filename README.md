@@ -4,6 +4,10 @@ My personal implementation of my already implemented Borocito-Server and Borocit
 
 > And maybe the next gen Control System for Borocito instances.  
 
+## Set-up
+
+Borocito CTRL requiere: MySQL (opcional), Redis (requerido).
+
 ## TODO
 
 i f*cking lost EVERYTHING. NOW, ALL OVER AGAIN.
@@ -29,8 +33,10 @@ i f*cking lost EVERYTHING. NOW, ALL OVER AGAIN.
 
 ### General
 
-   - REVIEW KEY-PAIR LOGIC : las key-pairs son las llaves requeridas para hacer peticiones al servidor. actualmente, es una key-pair por instancia. (SEGUIR POR AHORA)
-      - REVIEW : y si la key-pair son para obtener un slot instancia con una llave que es devuelta para que la instancia comienze a usar esa???? (PARA EL FUTURO: usar id de instancia)
+   - TODO : Usar KeyPair inicialmente para crear un Reporte de Infectado. Al crearse la instancia en el servidor, usar el ID devuelto como llave para enviar peticiones. KeyPair debe ser ELIMINADA COMPLETAMENTE despues de esta primera interacion.
+      BASICAMENTE:
+         - KeyPar es para crear una instancia y preparar el servidor.
+         - La ID devuelta es para la comunicacion Servidor-Cliente, nada mas.
 
    - TODO : Adapt Borocito-CLI software to work with Borocito-CS by default. ??????? (la retrocompatibilidad se perdera)
 

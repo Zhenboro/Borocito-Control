@@ -101,6 +101,17 @@
                     </button>
                 </dd>
 
+                <dt class="col-sm-3">Borocito</dt>
+                <dd class="col-sm-9">
+                    <dl class="row">
+                        <dt class="col-sm-2">Version</dt>
+                        <dd class="col-sm-10">{{ configuration.borocitos.version }}</dd>
+
+                        <dt class="col-sm-2">Binaries</dt>
+                        <dd class="col-sm-10">{{ configuration.borocitos.binaries }}</dd>
+                    </dl>
+                </dd>
+
                 <dt class="col-sm-3">Allow new instances</dt>
                 <dd class="col-sm-9">{{ configuration.allow_new_instances|yesno:"Yes,no,idk" }}</dd>
 
@@ -121,17 +132,6 @@
 
                         <dt class="col-sm-2">Repository</dt>
                         <dd class="col-sm-10">{{ configuration.boro_get.repository }}</dd>
-                    </dl>
-                </dd>
-
-                <dt class="col-sm-3">Borocito</dt>
-                <dd class="col-sm-9">
-                    <dl class="row">
-                        <dt class="col-sm-2">Version</dt>
-                        <dd class="col-sm-10">{{ configuration.borocitos.version }}</dd>
-
-                        <dt class="col-sm-2">Binaries</dt>
-                        <dd class="col-sm-10">{{ configuration.borocitos.binaries }}</dd>
                     </dl>
                 </dd>
             </dl>
