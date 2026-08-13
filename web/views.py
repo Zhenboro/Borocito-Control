@@ -13,6 +13,7 @@ from api.models import Instancia, Telemetria
 from configs.models import Configuration, Component
 from web.utilities import convert_size
 
+@login_required
 def dashboard(request: HttpRequest):
     configuration = Configuration.objects.last() # last row is always the active one
     infectados = Instancia.objects.count()
