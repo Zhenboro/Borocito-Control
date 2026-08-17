@@ -8,34 +8,37 @@ from pathlib import Path
 from datetime import datetime
 
 # Create your views here.
-from api.utilities import borocito_instance_endpoint
+from api.utilities import new_instance_endpoint, borocito_instance_endpoint
 from api.models import Instancia, Telemetria
 from configs.models import Component, Configuration
 
 @csrf_exempt
-@borocito_instance_endpoint
+@new_instance_endpoint
 def report(request: HttpRequest):
     if request.method == "POST":
         cuerpo = dict(json.loads(request.body))
-        instancia = Instancia.objects.filter(key=request.headers.get("Key-Pair")).first()
-        if instancia:
-            # Existe, asi que solo actualizamos
+        
+        # Existe, asi que solo actualizamos
+        if request.headers.get("UUID"):
+            instancia = Instancia.objects.filter(uuid=request.headers.get("UUID")).first()
             for campo, valor in cuerpo.items():
                 setattr(instancia, campo, valor)
+            instancia.public_ip = request.META.get('REMOTE_ADDR')
             instancia.save()
             return JsonResponse({"uuid": instancia.uuid}, status=200)
-        else:
-            # No existe, asi que lo creamos
-            instancia = Instancia(**cuerpo)
-            instancia.save()
-            return JsonResponse({"uuid": instancia.uuid}, status=201)
+        
+        # No existe, asi que lo creamos
+        instancia = Instancia(**cuerpo)
+        instancia.public_ip = request.META.get('REMOTE_ADDR')
+        instancia.save()
+        return JsonResponse({"uuid": instancia.uuid}, status=201)
     return JsonResponse({"status": "METHOD_NOT_SUPPORTED"}, status=405)
 
 @csrf_exempt
 @borocito_instance_endpoint
 def telemetry(request: HttpRequest):
     if request.method == "POST":
-        instancia = Instancia.objects.get(key=request.headers.get("Key-Pair"))
+        instancia = Instancia.objects.filter(uuid=request.headers.get("UUID")).first()
         if 'file' in request.FILES and request.FILES["file"]: # Es un archivo
             archivo = request.FILES["file"]
             telemetria = Telemetria(
@@ -47,8 +50,9 @@ def telemetry(request: HttpRequest):
             telemetria.telemetry.save(archivo.name, archivo)
             return JsonResponse({"uuid": telemetria.uuid}, status=201)
         if request.POST.get('content'): # Es telemetria (texto plano)
+            content = request.POST.get('content')
             with open(str(f"{settings.BOROCITO_TELEMETRY_DIR}/{instancia.uuid}.log"), "a", encoding="utf-8") as file:
-                file.write(str(f"{request.POST.get('content')}\n"))
+                file.write(str(f"{content}\n"))
             return JsonResponse({"status": "OK"}, status=201)
     return JsonResponse({"status": "METHOD_NOT_SUPPORTED"}, status=405)
 
@@ -62,15 +66,18 @@ def configuration(request: HttpRequest):
     respuesta += str(f"Version={config.borocitos['version']}\n")
     respuesta += str(f"Binaries={config.borocitos['binaries']}\n")
     respuesta += str(f"[boro-get]\n")
+    respuesta += str(f"Name={config.boro_get['name']}\n")
+    respuesta += str(f"Author={config.boro_get['author']}\n")
+    respuesta += str(f"Website={config.boro_get['website']}\n")
     respuesta += str(f"Version={config.boro_get['version']}\n")
-    respuesta += str(f"Binaries={config.boro_get['binary']}\n")
     respuesta += str(f"Repository={config.boro_get['repository']}\n")
+    respuesta += str(f"Binaries={config.boro_get['binary']}\n")
     return HttpResponse(respuesta, content_type="plain/text")
 
 @csrf_exempt
 @borocito_instance_endpoint
 def instance(request: HttpRequest):
-    instancia = Instancia.objects.get(key=request.headers.get("Key-Pair"))
+    instancia = Instancia.objects.filter(uuid=request.headers.get("UUID")).first()
     if request.method == "POST": # send response to CS
         instancia.command = None
         instancia.response = request.POST.get('content')

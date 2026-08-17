@@ -19,12 +19,15 @@ class Configuration(models.Model):
     def default_borocitos() -> dict:
         return { # this is where Borocito-Updater can get version and binaries to download and update
             "version": "0.3.0.0",
-            "binaries": "https://github.com/Borocito/Borocito-CLI/releases/download/latest/Borocitos.zip",
+            "binaries": "https://github.com/Borocito/Borocito-CLI/releases/latest/download/Borocitos.zip",
         }
     def default_boro_get() -> dict:
         return { # the boro-get component will request this information for component manage
+            "author": "Zhenboro",
+            "website": "https://github.com/Borocito/Components-for-Borocito/tree/main/boro-get",
+            "name": "boro-get",
             "version": "1.2.0.0",
-            "binary": "https://github.com/Borocito/Components-for-Borocito/releases/download/latest/boro-get.zip",
+            "binary": "https://github.com/Borocito/Components-for-Borocito/releases/latest/download/boro-get.zip",
             "repository": str(f"{settings.SERVER_DOMAIN}/api/boro-get/repository"),
         }
     server_status = models.BooleanField(default=True, null=True, blank=True, verbose_name="Server Status", help_text="Allow server to handle all requests.")
