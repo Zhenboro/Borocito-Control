@@ -114,7 +114,7 @@ def repository(request: HttpRequest):
         respuesta += str(f"From={component.website}\n")
         respuesta += str(f"[ASSEMBLY]\n")
         respuesta += str(f"Name={component.name}\n")
-        respuesta += str(f"Executable={component.executable}\n")
+        respuesta += str(f"Executable={component.executable}.exe\n")
         respuesta += str(f"Version={component.version}\n")
         respuesta += str(f"Web={component.docs}\n")
         respuesta += str(f"[INSTALLER]\n")
