@@ -4,8 +4,9 @@
 {% block page_title%}Telemetry{% endblock %}
 {% block content %}
 <div class="container mt-4">
+    <h3>Modificado {{ registro.modificado }}, {{ registro.tamaño }}</h3>
     <div style="background: #1e1e1e;color: #d4d4d4;padding: 15px;border-radius: 5px;overflow: auto;min-height: 600px;">
-        <pre>{{ registro }}</pre>
+        <pre>{{ registro.contenido }}</pre>
     </div>
 </div>
 {% endblock %}

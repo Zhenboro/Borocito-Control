@@ -7,6 +7,8 @@ from django.db.models import Sum
 from django.conf import settings
 
 import os
+import datetime
+import pathlib
 from pathlib import Path
 
 # Create your views here.
@@ -76,7 +78,13 @@ def telemetry(request: HttpRequest, uuid = None):
         return redirect('web:telemetry')
     if uuid:
         try:
-            registro = Path(f"{settings.BOROCITO_TELEMETRY_DIR}/{uuid}.log").read_text(encoding="utf-8")
+            logs_file = f"{settings.BOROCITO_TELEMETRY_DIR}/{uuid}.log"
+            logs_file_info = pathlib.Path(logs_file).stat()
+            registro = {
+                "tamaño": convert_size(logs_file_info.st_size),
+                "modificado": datetime.datetime.fromtimestamp(logs_file_info.st_mtime, tz=datetime.timezone.utc),
+                "contenido": Path(logs_file).read_text(encoding="utf-8")
+            }
         except Exception as ex:
             registro = str(ex)
         return render(request, "web/telemetry_logs.html", {"registro": registro})
