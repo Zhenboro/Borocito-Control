@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+
+{% block page_title%}Telemetry{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div style="background: #1e1e1e;color: #d4d4d4;padding: 15px;border-radius: 5px;overflow: auto;min-height: 600px;">
+        <pre>{{ registro }}</pre>
+    </div>
+</div>
+{% endblock %}

