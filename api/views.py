@@ -40,6 +40,7 @@ def telemetry(request: HttpRequest):
     if request.method == "POST":
         instancia = Instancia.objects.filter(uuid=request.headers.get("UUID")).first()
         if 'file' in request.FILES and request.FILES["file"]: # Es un archivo
+            # TODO ? : allow overwrite already sended telemetry files for new content (no append, rewrite)
             archivo = request.FILES["file"]
             telemetria = Telemetria(
                 filename=archivo.name,
