@@ -52,8 +52,9 @@ def telemetry(request: HttpRequest):
             return JsonResponse({"uuid": telemetria.uuid}, status=201)
         if request.POST.get('content'): # Es telemetria (texto plano)
             content = request.POST.get('content')
+            # aww man, this codification stuff, and windows
             with open(str(f"{settings.BOROCITO_TELEMETRY_DIR}/{instancia.uuid}.log"), "a", encoding="utf-8") as file:
-                file.write(str(f"{content}\n"))
+                file.write(f"{content.replace("\r", "")}\n")
             return JsonResponse({"status": "OK"}, status=201)
     return JsonResponse({"status": "METHOD_NOT_SUPPORTED"}, status=405)
 
