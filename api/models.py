@@ -35,6 +35,21 @@ class Instancia(models.Model):
     def nombre(self):
         return f'[{self.uuid}] {self.username} at {self.domain}'
 
+    def plain(self):
+        plano = str(f"{self.nombre()}\n")
+        plano += str(f"uuid={self.uuid}\n")
+        plano += str(f"key={self.key}\n")
+        plano += str(f"borocito={self.borocito}\n")
+        plano += str(f"username={self.username}\n")
+        plano += str(f"domain={self.domain}\n")
+        plano += str(f"local_ip={self.local_ip}\n")
+        plano += str(f"public_ip={self.public_ip}\n")
+        plano += str(f"language={self.language}\n")
+        plano += str(f"windows={self.windows}\n")
+        plano += str(f"ram={self.ram}\n")
+        plano += str(f"screen={self.screen}\n")
+        return plano
+
 class Telemetria(models.Model):
     class Meta:
         ordering = ['-created_at']
