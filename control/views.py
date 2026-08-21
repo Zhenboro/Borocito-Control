@@ -3,7 +3,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
 import os
-from datetime import datetime
 import mimetypes
 from wsgiref.util import FileWrapper
 
@@ -38,8 +37,8 @@ def get_telemetry_log(request, uuid):
     return HttpResponse(respuesta, content_type="plain/text")
 
 #@control_instance_endpoint
-def get_telemetry_file(request, uuid):
-    telemetria = Telemetria.objects.get(uuid=uuid)
+def get_telemetry_file(request, filename):
+    telemetria = Telemetria.objects.get(filename=filename)
     filename = os.path.basename(telemetria.telemetry.path)
     response = StreamingHttpResponse(
         FileWrapper(open(telemetria.telemetry.path, "rb")),

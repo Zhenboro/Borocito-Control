@@ -12,5 +12,5 @@ urlpatterns = [
     
     path('get/report/<str:uuid>', views.get_user_report, name="get-report"),
     path('get/telemetry-log/<str:uuid>', views.get_telemetry_log, name="get-telemetry-log"),
-    path('get/telemetry-file/<str:uuid>', views.get_telemetry_file, name="get-telemetry-file"),
+    path('get/telemetry-file/<str:filename>', views.get_telemetry_file, name="get-telemetry-file"),
 ]
