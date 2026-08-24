@@ -1,6 +1,6 @@
 import math
 
-def convert_size(size_bytes):
+def convert_size(size_bytes: int):
     if size_bytes == 0:
         return "0 B"
     size_name = ("B", "KB", "MB", "GB", "TB", "PB")

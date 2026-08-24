@@ -5,6 +5,7 @@ import uuid
 import os
 
 # Create your models here.
+from web.utilities import convert_size
 
 class Instancia(models.Model):
     class Meta:
@@ -33,8 +34,18 @@ class Instancia(models.Model):
         return f'[{self.uuid}] {self.username} at {self.domain}'
 
     def nombre(self):
-        return f'[{self.uuid}] {self.username} at {self.domain}'
-
+        return f'{self.username} at {self.domain}'
+    
+    def ultima_respuesta(self):
+        retorno = self.response
+        if not "#" in retorno:
+            return self.modified_at
+        retorno = retorno.split("\n")[0].split("|")[3]
+        return retorno
+    
+    def ram_convert(self):
+        return convert_size(int(self.ram))
+    
     def plain(self):
         plano = str(f"{self.nombre()}\n")
         plano += str(f"uuid={self.uuid}\n")

@@ -148,7 +148,7 @@
       </div>
       <div class="modal-body">
         <p>
-            Only instances with one of these Key-Pairs can make requests to this server.
+            Only instances with one of these Key-Pairs can be created and handled by this server.
         </p>
         <ul class="list-group text-center my-2">
             {% for key in configuration.key_pairs %}
@@ -156,7 +156,7 @@
             {% endfor %}
         </ul>
         <div class="alert alert-warning" role="alert">
-            If you click the "Generate new Key-Pairs" button, all your current instances will lose the connection with this server.
+            If you click the "Generate new Key-Pairs" button, all old possible new instances will not be handled by the server.
         </div>
       </div>
       <div class="modal-footer">
